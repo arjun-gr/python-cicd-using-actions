@@ -1,0 +1,28 @@
+name: Python CI/CD pipeline
+
+on: [push, workflow_dispatch]
+
+jobs:
+  lint-and-test:
+    name: Lint and test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: action/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      
+      - name: Install requirements
+        run: pip install flake8 pytlint
+
+      - name: Lint hello.py
+        run: |
+              flake8 hello.py
+              pylint hello.py
+      
+      - name: Test the script
+        run: python hello.py | grep -i hello || exit 1
